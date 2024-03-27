@@ -1,0 +1,78 @@
+<?php
+session_start();
+if (!isset($_SESSION["username"])) {
+    header("Location: login.php");
+    exit();
+}
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "ql_nhansu";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $ma_nv = $_POST["ma_nv"];
+    $ten_nv = $_POST["ten_nv"];
+    $phai = $_POST["phai"];
+    $noi_sinh = $_POST["noi_sinh"];
+    $ma_phong = $_POST["ma_phong"];
+    $luong = $_POST["luong"];
+
+    $sql = "UPDATE NhanVien SET Ten_NV='$ten_nv', Phai='$phai', Noi_Sinh='$noi_sinh', Ma_Phong='$ma_phong', Luong='$luong' WHERE Ma_NV='$ma_nv'";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Employee information updated successfully";
+    } else {
+        echo "Error updating employee information: " . $conn->error;
+    }
+
+    $conn->close();
+}
+
+if (isset($_GET['id'])) {
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $ma_nv = $_GET['id'];
+    $sql = "SELECT * FROM NhanVien WHERE Ma_NV='$ma_nv'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows == 1) {
+        $row = $result->fetch_assoc();
+        $conn->close();
+    } else {
+        echo "Employee not found";
+        $conn->close();
+        exit();
+    }
+} else {
+    echo "Employee ID not provided";
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="info">Edit Employee Information</h1>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+            <input type="hidden" name="ma_nv" value="<?php echo $row['Ma_NV']; ?>">
+            <label for="ten_nv">Tên Nhân Viên:</label>
+            <input type="text" id="ten_nv" name="ten_nv" value="<?php echo $row['Ten_NV']; ?>"><br><br>
+            <label for="phai">Giới Tính:</

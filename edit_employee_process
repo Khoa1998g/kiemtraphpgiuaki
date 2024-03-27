@@ -1,0 +1,26 @@
+<?php
+// Include database connection or establish connection here
+
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data
+    $employee_id = $_POST["id"];
+    $ma_nv = $_POST["ma_nv"];
+    $ten_nv = $_POST["ten_nv"];
+    $phai = $_POST["phai"];
+    $noi_sinh = $_POST["noi_sinh"];
+    $ma_phong = $_POST["ma_phong"];
+    $luong = $_POST["luong"];
+
+    // Update employee data in the database
+    // Perform database update query here based on the $employee_id
+    // Example query:
+    // $sql = "UPDATE employees SET Ma_NV='$ma_nv', Ten_NV='$ten_nv', Phai='$phai', Noi_Sinh='$noi_sinh', Ma_Phong='$ma_phong', Luong='$luong' WHERE id='$employee_id'";
+    
+    // Execute the update query
+    
+    // Redirect to a confirmation page or back to the employee list page
+    header("Location: employee_list.php");
+    exit();
+}
+?>
